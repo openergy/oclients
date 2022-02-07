@@ -1,31 +1,7 @@
 import functools
-import asyncio
-import concurrent
 
 from .rest_client import RESTClient
-
-_thread_pool = None  # shared between threads
-
-
-def get_loop():
-    """
-    Rules :
-    * 1 loop per thread (prevents from multiple run_until_compete on same loop in sync code)
-    * 1 thread pool per process
-    * 1 process pool per process
-    """
-    try:
-        return asyncio.get_event_loop()
-    except RuntimeError:  # in a thread, loop may not be set
-        asyncio.set_event_loop(asyncio.new_event_loop())
-        return asyncio.get_event_loop()
-
-
-def get_thread_pool():
-    global _thread_pool
-    if _thread_pool is None:
-        _thread_pool = concurrent.futures.ThreadPoolExecutor()
-    return _thread_pool
+from ..snippets.oasyncio import get_loop, get_thread_pool
 
 
 def _coroutine_wrapper(sync_fct):

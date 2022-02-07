@@ -2,6 +2,9 @@ import time
 import asyncio
 
 import aiohttp
+from ..snippets.ojson import loads as json_loads
+from ..snippets.oasyncio import get_loop
+from ..exceptions import ClientResponseError
 
 
 class AiohttpClient:
@@ -25,7 +28,7 @@ class AiohttpClient:
     @staticmethod
     async def check_rep(rep):
         if (rep.status // 100) != 2:
-            raise exceptions.ClientResponseError(
+            raise ClientResponseError(
                 await rep.text(),
                 rep.status,
                 f"{rep.request_info.method} {rep.request_info.real_url.human_repr()}"
