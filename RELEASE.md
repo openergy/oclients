@@ -1,6 +1,7 @@
 # oclients
 
-## next
+## 1.1.0
+* m: aiohttp AccessLogger was added
 
 ## 1.0.1
 * p: devops debug
