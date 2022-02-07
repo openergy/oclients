@@ -4,6 +4,8 @@ import concurrent
 
 from .rest_client import RESTClient
 
+_thread_pool = None  # shared between threads
+
 
 def get_loop():
     """

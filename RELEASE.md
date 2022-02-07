@@ -1,6 +1,7 @@
 # oclients
 
-## next
+## 1.1.2
+* p: requests async rest client debug
 
 ## 1.1.1
 * p: api debug
