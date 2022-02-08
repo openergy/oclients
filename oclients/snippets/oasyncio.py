@@ -82,7 +82,7 @@ def get_function_logger(stack_level=0):
         parent_dir_path, child_name = os.path.split(parent_dir_path)
         module_path.insert(0, child_name)
     name = ".".join(module_path + [inspect.stack()[stack_level + 1][3]])
-    logger = ologging.getLogger(name)
+    logger = logging.getLogger(name)
     return logger
 
 

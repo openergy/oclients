@@ -1,6 +1,6 @@
 from .base import RequestsClient
 
-from ..snippets.ojson import loads as json_dumps
+from ..snippets.ojson import dumps as json_dumps
 from ..snippets.odatetime import ISO_FORMAT
 
 JSON_HEADER = {"content-type": "application/json"}
@@ -116,9 +116,9 @@ class RESTClient(RequestsClient):
         # send request
         url_fields = (self.base_endpoint_url, resource, resource_id, method_name)
         rep = getattr(self.session, http_method.lower())(
-            "/".join((field for field in url_fields if field is not None)) + '/',
+            "/".join((field for field in url_fields if field is not None)) + "/",
             params=self._encode_dict(params),
-            data=json_dumps(data).encode("utf-8") if send_json else data,
+            data=json_dumps(data).encode("utf-8") if send_json and data is not None else data,
             verify=self.verify_ssl,
             headers=headers,
             timeout=self.timeout
@@ -142,8 +142,9 @@ class RESTClient(RequestsClient):
             send_json=True):
         resource = resource.strip("/")
         rep = getattr(self.session, http_method.lower())(
-            "%s/%s/%s/" % (self.base_endpoint_url, resource, method_name), params=self._encode_dict(params),
-            data=json_dumps(data).encode("utf-8") if send_json else data,
+            "%s/%s/%s/" % (self.base_endpoint_url, resource, method_name),
+            params=self._encode_dict(params),
+            data=json_dumps(data).encode("utf-8") if send_json and data is not None else data,
             verify=self.verify_ssl,
             headers=JSON_HEADER if send_json else None,
             timeout=self.timeout
