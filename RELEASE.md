@@ -1,6 +1,7 @@
 # oclients
 
-## next
+## 1.1.5
+* p: snippets were adapted
 
 ## 1.1.4
 * p: requests rest client debug

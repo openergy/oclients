@@ -1,12 +1,29 @@
 import functools
+import concurrent
 
 from .rest_client import RESTClient
-from ..snippets.oasyncio import get_loop, get_thread_pool
+from ..snippets.oasyncio import get_loop
+
+_thread_pool = None  # shared between threads
+
+
+def _get_thread_pool(max_threads_if_creation=None):
+    """
+
+    Parameters
+    ----------
+    max_threads_if_creation: must be >=1 or None (auto)
+        will only be taken into account on pool creation
+    """
+    global _thread_pool
+    if _thread_pool is None:
+        _thread_pool = concurrent.futures.ThreadPoolExecutor(max_threads_if_creation)
+    return _thread_pool
 
 
 def _coroutine_wrapper(sync_fct):
     async def _async_fct(*args, **kwargs):
-        return await get_loop().run_in_executor(get_thread_pool(), functools.partial(
+        return await get_loop().run_in_executor(_get_thread_pool(), functools.partial(
             sync_fct,
             *args,
             **kwargs
